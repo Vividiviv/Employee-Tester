@@ -20,9 +20,14 @@ public class EmployeeServiceImplement implements EmployeeService {
         employee.setEname(ename);
         employee.setSalary(salary);
         employee.setPosition(position);
-        employeeRepos.save(employee);
-        String response = "The Request for Addition of:\nEname " + ename + "\nSalary " + salary + "\nPosition " + position + "\n is successfully processed";
-        return response;
+        Boolean result = employeeRepos.exists(eid);
+        if(!result) {
+            employeeRepos.save(employee);
+            String response = "The Request for Addition of:\nEname " + ename + "\nSalary " + salary + "\nPosition " + position + "\n is successfully processed";
+            return response;
+        }
+        else
+            return "The value cannot be inserted in the database : Reason Duplicate Primary Key";
     }
 
     //@RequestMapping(value = "/EmployeeDetails/{EmpId}", method = RequestMethod.GET)
@@ -31,5 +36,13 @@ public class EmployeeServiceImplement implements EmployeeService {
         result = employeeRepos.findOne(eid);
         System.out.println("The details of the Employee are:\nNAME->" + ((Employee) result).getEname() + "\nSALARY->" + ((Employee) result).getSalary() + "\nDESIGNATION->" + ((Employee) result).getPosition());
         return result.toString();
+    }
+
+    public String delEmployee(int eid){
+        Boolean result = employeeRepos.exists(eid);
+        if(!result)
+            return "The entry with given Empid is not present in the database";
+        employeeRepos.delete(eid);
+        return "The entry with given EmpId:"+eid+" is deleted from the database";
     }
 }

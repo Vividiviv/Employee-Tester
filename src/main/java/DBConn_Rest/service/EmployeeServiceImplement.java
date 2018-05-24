@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class EmployeeServiceImplement implements EmployeeService {
 
@@ -44,5 +47,17 @@ public class EmployeeServiceImplement implements EmployeeService {
             return "The entry with given Empid is not present in the database";
         employeeRepos.delete(eid);
         return "The entry with given EmpId:"+eid+" is deleted from the database";
+    }
+    public List<String> getAllDetails()
+    {
+        List<String> result= new ArrayList<String>();
+        List<Employee> response= new ArrayList<Employee>();
+        response = (List<Employee>)employeeRepos.findAll();
+        for( Employee e: response)
+        {
+            String part="Employee ID : "+e.getEid()+" Employee Name : "+e.getEname()+" Salary: "+e.getSalary()+" Position"+e.getPosition();
+            result.add(part);
+        }
+        return result;
     }
 }
